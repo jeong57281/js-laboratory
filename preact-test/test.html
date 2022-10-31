@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    * {
+      padding: 0;
+      margin: 0;
+      box-sizing: border-box;
+    }
+
+    #app>div>button {
+      background: linear-gradient(90deg,
+          rgba(2, 0, 36, 1) 0%,
+          rgba(9, 9, 121, 1) 35%,
+          rgba(0, 212, 255, 1) 100%);
+      color: white;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="root"></div>
+  <script type="module">
+    import { useState, useEffect } from '../hooks/src/index.js';
+    import { memo } from '../compat/src/memo.js';
+    import { render, createElement as h } from './index.js';
+
+    function useCustomHook() {
+      const [state, setState] = useState(
+        Array(3)
+          .fill(null)
+          .map((el, index) => Math.floor(Math.random() * 40) + 10)
+      );
+
+      return [state, setState];
+    }
+
+    function Button({ handleUpdate }) {
+      useEffect(() => {
+        console.log('rendered');
+      }, []);
+
+      return (
+        h(
+          'button',
+          { onclick: handleUpdate },
+          'update'
+        )
+      );
+    }
+
+    function App() {
+      const [state, setState] = useCustomHook();
+
+      const update = () => {
+        setState((prev) => {
+          const newState = Array(prev.length)
+            .fill(null)
+            .map(() => Math.floor(Math.random() * 40) + 10);
+          return newState;
+        });
+      }
+
+      return (
+        h(
+          'div',
+          { id: 'app' },
+          // memo => 원하는 대로 잘 작동하고 있지 않음.
+          h(memo(Button), { handleUpdate: update }, null),
+          h('hr', null, null),
+          h(
+            'div',
+            null,
+            ...state.map((item, index) =>
+              h(
+                'button',
+                { style: `font-size: ${item}px`, key: `item${index}` },
+                `button${index}`
+              )
+            )
+          )
+        )
+      )
+    }
+
+    render(
+      h(App), // App() 으로 주면 곧바로 함수 내부가 실행되기 때문에 hooks 를 사용할 수 없다.
+      document.querySelector('#root')
+    );
+
+    // 여기서 또 데이터를 삭제하기 위한 식별자를 html props 에 저장해야만 되는지 고민된다.
+    // 렌더링이 되면 HTMLLiElement 를 키, 값을 id 로 하는 데이터를 관리하면 사용자 조작을 막을 수 있다.
+    // 근데 react 에서는 어떻게 구현하지...? useRef...?
+  </script>
+</body>
+
+</html>

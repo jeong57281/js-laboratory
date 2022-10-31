@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    * {
+      padding: 0;
+      margin: 0;
+      box-sizing: border-box;
+    }
+
+    #app>div>button {
+      background: linear-gradient(90deg,
+          rgba(2, 0, 36, 1) 0%,
+          rgba(9, 9, 121, 1) 35%,
+          rgba(0, 212, 255, 1) 100%);
+      color: white;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="app">
+    <button id="updateBtn">update</button>
+    <div id="list">
+    </div>
+  </div>
+
+  <script>
+    const $list = document.querySelector('#list');
+
+    function update() {
+      $list.innerHTML = '';
+
+      for (let i = 0; i < 100; i++) {
+        const $button = document.createElement('button');
+        $button.innerText = `button${i}`;
+        $button.style.fontSize = `${Math.floor(Math.random() * 40) + 10}px`;
+
+        $list.appendChild($button);
+      }
+    }
+
+    update();
+
+    document.querySelector('#updateBtn').addEventListener('click', async () => {
+      /*
+      await sleep(1000);
+      update();
+      await sleep(1000);
+      update();
+      await sleep(1000);
+      */
+      update();
+    });
+
+    function sleep(ms) {
+      return new Promise(resolve => setTimeout(() => resolve(), ms));
+    }
+  </script>
+</body>
+
+</html>

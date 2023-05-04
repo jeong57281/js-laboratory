@@ -1,2 +1,0 @@
-"use strict";(self.webpackChunkgit_repo_blog_generator=self.webpackChunkgit_repo_blog_generator||[]).push([[186],{3618:function(e,t,n){n.r(t);var o=n(7294);t.default=function(e){return console.log(e),o.createElement("div",null,"Post page")}}}]);
-//# sourceMappingURL=component---src-templates-post-tsx-7dc93102c6be8f1af1f0.js.map
